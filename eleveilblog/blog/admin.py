@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from .models import Category, Tag, Post
-
+from .adminforms import PostAdminForm
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -45,6 +45,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
+    form = PostAdminForm
     list_display = ['title', 'desc','status', 'category', 'tag', 'created', 'operator']
     exclude = ('owner', )    #不展示的字段
 
