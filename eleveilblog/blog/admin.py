@@ -3,12 +3,19 @@ from django.urls import reverse
 from django.utils.html import format_html
 from .models import Category, Tag, Post
 from .adminforms import PostAdminForm
+from custom_site import custom_site
 
-@admin.register(Category)
+class PostInline(admin.TabularInline):
+    fields = ('title', 'desc')
+    extra = 1
+    model = Post
+
+
+@admin.register(Category, site=custom_site)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'status', 'is_nav', 'post_count', 'created']
     fields = ('name','status','is_nav')
-
+    inlines = [PostInline,]
     def post_count(self, obj):
         return obj.post_set.count()
     post_count.short_description = '文章数量'
@@ -18,7 +25,7 @@ class CategoryAdmin(admin.ModelAdmin):
         return super(CategoryAdmin, self).save_model(request, obj, form, change)
 
 
-@admin.register(Tag)
+@admin.register(Tag, site=custom_site)
 class TagAdmin(admin.ModelAdmin):
     list_display = ['name', 'status', 'created']
     fields = ('name', 'status')
@@ -43,7 +50,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
         return queryset
 
 
-@admin.register(Post)
+@admin.register(Post, site=custom_site)
 class PostAdmin(admin.ModelAdmin):
     form = PostAdminForm
     list_display = ['title', 'desc','status', 'category', 'tag', 'created', 'operator']
@@ -99,7 +106,7 @@ class PostAdmin(admin.ModelAdmin):
     def operator(self, obj):
         return format_html(
             '<a href="{}">编辑</a>',
-            reverse('admin:blog_post_change', args=(obj.id,))
+            reverse('cus_admin:blog_post_change', args=(obj.id,))
         )
     operator.short_description = '操作'
 
@@ -110,5 +117,7 @@ class PostAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super(PostAdmin, self).get_queryset(request)
         return qs.filter(owner=request.user)
+
+
 
 
