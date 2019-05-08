@@ -55,7 +55,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
 @admin.register(Post, site=custom_site)
 class PostAdmin(BaseOwnerAdmin):
     form = PostAdminForm
-    list_display = ['title', 'desc','status', 'category', 'tag', 'created', 'operator']
+    list_display = ['title', 'desc','status', 'category', 'created', 'operator']
     exclude = ('owner', )    #不展示的字段
 
     #展示的字段
@@ -97,7 +97,7 @@ class PostAdmin(BaseOwnerAdmin):
 
     # save_on_top = True #保存/编辑/编辑并新建按钮是否现实在顶部
 
-    # filter_horizontal = ('tag',)
+    filter_horizontal = ('tag',)
 
     # class Media:
     #     css = {
