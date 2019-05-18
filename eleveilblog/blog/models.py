@@ -105,7 +105,7 @@ class Post(models.Model):
             post_list = []
         else:
             post_list = tag.post_set.filter(status=Post.STATUS_NORMAL)\
-            .select_related('owner','category')
+                                    .select_related('owner','category')
         return post_list, tag
 
     @staticmethod
@@ -117,7 +117,7 @@ class Post(models.Model):
             post_list = []
         else:
             post_list = category.post_set.filter(status=Post.STATUS_NORMAL)\
-            .select_related('owner', 'category')
+                                         .select_related('owner', 'category')
 
         return post_list, category
 
